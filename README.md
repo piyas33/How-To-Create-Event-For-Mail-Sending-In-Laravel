@@ -97,8 +97,40 @@ class HomeController extends Controller
     }
     public function index()
     {
-        Event::fire(new SendMail(2));
+        $user_id = 1;
+        event(new SendMail($user_id));
         return view('home');
     }
 }
+```
+### Summary
+1. Fire Event
+``
+event(new SendMail($user_id))
+```
+2. Create Event "SendMail" 
+*** take $user_id and send to listener
+```
+    public function __construct($userId)
+    {
+        $this->userId = $userId;
+    }
+ ```
+
+3. Create event listener for "SendMail" event
+(Hear we put all code)
+```
+    public function handle(SendMail $event)
+    {
+        //code
+    }
+ ```
+ 4.Regiter Event
+ ```
+     protected $listen = [
+        ...
+        'App\Events\SendMail' => [
+            'App\Listeners\SendMailFired',
+        ],
+    ];
 ```
